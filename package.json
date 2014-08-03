@@ -1,0 +1,14 @@
+{
+	"name": "stylecow-plugin-rem",
+	"description": "Stylecow plugin to add a fallback in pixels for browsers not supporting rem values",
+	"version": "1.0.0",
+	"author": "Oscar Otero <oom@oscarotero.com>",
+	"homepage": "https://github.com/stylecow/stylecow-plugin-rem",
+	"bugs": "https://github.com/stylecow/stylecow-plugin-rem/issues",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/stylecow/stylecow-plugin-rem.git"
+	},
+	"main": "index.js",
+	"license": "MIT"
+}
