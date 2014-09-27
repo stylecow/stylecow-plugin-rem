@@ -1,7 +1,7 @@
 stylecow plugin rem
 ===================
 
-Stylecow plugin to add a fallback in pixels for browsers not supporting rem values.
+Stylecow plugin to add a fallback in pixels for browsers not supporting rem values. [More info about rem](http://snook.ca/archives/html_and_css/font-size-with-rem)
 
 You write:
 
