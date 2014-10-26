@@ -16,28 +16,28 @@ module.exports = function (stylecow) {
 
 		//Changes the default value on :root or html selectors
 		RuleBefore: function (rule) {
-			if (rule.hasChild('Selector', [':root', 'html'])) {
-				rule.children('Declaration', 'font-size').forEach(function (declaration) {
-					rule.ancestor('Root').setData('rem', toPixels(declaration.value));
+			if (rule.hasChild({type: 'Selector', string: [':root', 'html']})) {
+				rule.children({type: 'Declaration', name: 'font-size'}).forEach(function (declaration) {
+					rule.ancestor({type: 'Root'}).setData('rem', toPixels(declaration.getValue().join(', ')));
 				});
 			}
 		},
 
 		//Add the fallback
 		Declaration: function (declaration) {
-			var value = declaration.value;
+			var value = declaration.getValue().join(', ');
 
 			if (value.indexOf('rem') === -1) {
 				return false;
 			}
 
-			declaration.cloneBefore().value = value.replace(/([0-9\.]+)rem/, function (match) {
+			declaration.cloneBefore().setValue(value.replace(/([0-9\.]+)rem/, function (match) {
 				if (match[0] === '.') {
 					match = '0' + match;
 				}
 
 				return (declaration.getData('rem') * parseFloat(match, 10)) + 'px';
-			});
+			}));
 		}
 	});
 };
