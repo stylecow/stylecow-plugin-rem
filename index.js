@@ -18,20 +18,20 @@ module.exports = function (stylecow) {
 		RuleBefore: function (rule) {
 			if (rule.hasChild({type: 'Selector', string: [':root', 'html']})) {
 				rule.children({type: 'Declaration', name: 'font-size'}).forEach(function (declaration) {
-					rule.ancestor({type: 'Root'}).setData('rem', toPixels(declaration.getValue().join(', ')));
+					rule.parent({type: 'Root'}).setData('rem', toPixels(declaration.getContent().join(', ')));
 				});
 			}
 		},
 
 		//Add the fallback
 		Declaration: function (declaration) {
-			var value = declaration.getValue().join(', ');
+			var value = declaration.getContent().join(', ');
 
 			if (value.indexOf('rem') === -1) {
 				return false;
 			}
 
-			declaration.cloneBefore().setValue(value.replace(/([0-9\.]+)rem/, function (match) {
+			declaration.cloneBefore().setContent(value.replace(/([0-9\.]+)rem/, function (match) {
 				if (match[0] === '.') {
 					match = '0' + match;
 				}
