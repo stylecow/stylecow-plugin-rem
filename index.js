@@ -16,28 +16,28 @@ module.exports = function (stylecow) {
 
 		//Changes the default value on :root or html selectors
 		RuleBefore: function (rule) {
-			if (rule.hasChild({type: 'Selector', string: [':root', 'html']})) {
-				rule.children({type: 'Declaration', name: 'font-size'}).forEach(function (declaration) {
-					rule.parent({type: 'Root'}).setData('rem', toPixels(declaration.getContent().join(', ')));
+			if (rule.firstChild({type: 'Selectors'}).hasChild({type: 'Selector', string: [':root', 'html']})) {
+				rule.firstChild({type: 'Block'}).children({type: 'Declaration', name: 'font-size'}).forEach(function (declaration) {
+					rule.parent({type: 'Root'}).setData('rem', toPixels(declaration.join(', ')));
 				});
 			}
 		},
 
 		//Add the fallback
 		Declaration: function (declaration) {
-			var value = declaration.getContent().join(', ');
+			var code = declaration.toString();
 
-			if (value.indexOf('rem') === -1) {
+			if (code.indexOf('rem') === -1) {
 				return false;
 			}
 
-			declaration.cloneBefore().setContent(value.replace(/([0-9\.]+)rem/, function (match) {
+			declaration.before(stylecow.Declaration.createFromString(code.replace(/([0-9\.]+)rem/, function (match) {
 				if (match[0] === '.') {
 					match = '0' + match;
 				}
 
 				return (declaration.getData('rem') * parseFloat(match, 10)) + 'px';
-			}));
+			})));
 		}
 	});
 };
