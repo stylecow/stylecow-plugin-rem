@@ -8,30 +8,34 @@ module.exports = function (stylecow) {
 		ios: 4.0
 	}, function () {
 
-		//Set the default value of a rem (16px)
 		stylecow.addTask({
-			filter: {
-				type: 'Root'
-			},
-			executeBefore: true,
 			fn: function (root) {
-				root.setData('rem', 16);
-			}
-		});
+				var rem = 16;
 
+				root.children({
+					type: 'Rule'
+				})
+				.forEach(function (rule) {
+					var isroot = rule.firstChild({
+							type: 'Selectors'
+						}).has({
+							type: 'Selector',
+							string: [':root', 'html']
+						});
 
-		//Changes the default value on :root or html selectors
-		stylecow.addTask({
-			filter: {
-				type: 'Rule'
-			},
-			executeBefore: true,
-			fn: function (rule) {
-				if (rule.firstChild({type: 'Selectors'}).hasChild({type: 'Selector', string: [':root', 'html']})) {
-					rule.firstChild({type: 'Block'}).children({type: 'Declaration', name: 'font-size'}).forEach(function (declaration) {
-						rule.parent({type: 'Root'}).setData('rem', toPixels(declaration.join(', ')));
-					});
-				}
+					if (isroot) {
+						rule.firstChild({
+							type: 'Block'
+						}).children({
+							type: 'Declaration',
+							name: 'font-size'
+						}).forEach(function (declaration) {
+							rem = toPixels(declaration.join(','));
+						});
+					}
+				});
+
+				root.setData('rem', rem);
 			}
 		});
 
