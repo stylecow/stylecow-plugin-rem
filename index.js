@@ -16,14 +16,14 @@ module.exports = function (stylecow) {
 					type: 'Rule'
 				})
 				.forEach(function (rule) {
-					var isroot = rule.firstChild({
-							type: 'Selectors'
-						}).has({
+					if (
+						rule
+						.firstChild('Selectors')
+						.has({
 							type: 'Selector',
 							string: [':root', 'html']
-						});
-
-					if (isroot) {
+						})
+					) {
 						rule.firstChild({
 							type: 'Block'
 						}).children({
