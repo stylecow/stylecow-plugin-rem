@@ -12,25 +12,25 @@ module.exports = function (stylecow) {
 			fn: function (root) {
 				var rem = 16;
 
-				root.children({
+				root.getChildren({
 					type: 'Rule'
 				})
 				.forEach(function (rule) {
 					if (
 						rule
-						.firstChild('Selectors')
+						.getChild('Selectors')
 						.has({
 							type: 'Selector',
 							string: [':root', 'html']
 						})
 					) {
-						rule.firstChild({
+						rule.getChild({
 							type: 'Block'
-						}).children({
+						}).getChildren({
 							type: 'Declaration',
 							name: 'font-size'
 						}).forEach(function (declaration) {
-							rem = toPixels(declaration.join(','));
+							rem = toPixels(declaration.get('Unit'));
 						});
 					}
 				});
@@ -46,43 +46,43 @@ module.exports = function (stylecow) {
 				type: 'Declaration'
 			},
 			fn: function (declaration) {
-				var code = declaration.toString();
-
-				if (code.indexOf('rem') === -1) {
-					return false;
+				if (declaration.has({
+					type: 'Unit',
+					name: 'rem'
+				})) {
+					declaration
+						.cloneBefore()
+						.getAll({
+							type: 'Unit',
+							name: 'rem'
+						})
+						.forEach(function (unit) {
+							unit.name = 'px';
+							unit.get('Number').name *= unit.getData('rem');
+						});
 				}
-
-				declaration.before(stylecow.Declaration.createFromString(code.replace(/([0-9\.]+)rem/, function (match) {
-					if (match[0] === '.') {
-						match = '0' + match;
-					}
-
-					return (declaration.getData('rem') * parseFloat(match, 10)) + 'px';
-				})));
 			}
 		});
 	});
 };
 
-function toPixels (value) {
-	if (value[0] === '.') {
-		value = '0' + value;
+function toPixels (unit) {
+	var number = unit.get('Number');
+
+	if (unit.name === 'px') {
+		return number.name;
 	}
 
-	if (value.indexOf('px') !== -1) {
-		return parseInt(value, 10);
+	if (unit.name === 'em') {
+		return number.name * 16;
 	}
 
-	if (value.indexOf('em') !== -1) {
-		return parseFloat(value, 10) * 16;
+	if (unit.name === 'pt') {
+		return number.name * 14;
 	}
 
-	if (value.indexOf('pt') !== -1) {
-		return parseFloat(value, 10) * 14;
-	}
-
-	if (value.indexOf('%') !== -1) {
-		return parseFloat(value, 10)/100 * 16;
+	if (unit.name === '%') {
+		return number.name / 100 * 16;
 	}
 
 	return 16;
