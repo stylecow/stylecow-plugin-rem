@@ -10,32 +10,34 @@ module.exports = function (stylecow) {
 
 		stylecow.addTask({
 			fn: function (root) {
-				var rem = 16;
+				root.setData('rem', 16);
+			}
+		});
 
-				root.getChildren({
-					type: 'Rule'
-				})
-				.forEach(function (rule) {
-					if (
-						rule
-						.getChild('Selectors')
-						.has({
-							type: 'Selector',
-							string: [':root', 'html']
-						})
-					) {
-						rule.getChild({
-							type: 'Block'
-						}).getChildren({
-							type: 'Declaration',
-							name: 'font-size'
-						}).forEach(function (declaration) {
-							rem = toPixels(declaration.get('Unit'));
-						});
-					}
-				});
-
-				root.setData('rem', rem);
+		stylecow.addTask({
+			filter: {
+				type: 'Rule'
+			},
+			fn: function (rule) {
+				if (
+					rule.parent
+				 && rule.parent.type === 'Root'
+				 && rule
+					.getChild('Selectors')
+					.has({
+						type: 'Selector',
+						string: [':root', 'html']
+					})
+				 ) {
+					rule.getChild({
+						type: 'Block'
+					}).getChildren({
+						type: 'Declaration',
+						name: 'font-size'
+					}).forEach(function (declaration) {
+						rule.parent.setData('rem', toPixels(declaration.get('Unit')));
+					});
+				}
 			}
 		});
 
