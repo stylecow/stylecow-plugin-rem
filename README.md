@@ -1,6 +1,8 @@
 stylecow plugin rem
 ===================
 
+[![Build Status](https://travis-ci.org/stylecow/stylecow-plugin-rem.svg)](https://travis-ci.org/stylecow/stylecow-plugin-rem)
+
 Stylecow plugin to add a fallback in pixels for browsers not supporting rem values. [More info about rem](http://snook.ca/archives/html_and_css/font-size-with-rem)
 
 You write:
@@ -42,3 +44,5 @@ p {
 	font-size: 2rem;
 }
 ```
+
+More demos in [the tests folder](https://github.com/stylecow/stylecow-plugin-rem/tree/master/tests/cases)
