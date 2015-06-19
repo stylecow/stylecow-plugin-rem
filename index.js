@@ -1,5 +1,7 @@
 module.exports = function (stylecow) {
 
+	var rem;
+
 	stylecow.forBrowsersLowerThan({
 		firefox: 3.6,
 		explorer: 9.0,
@@ -9,8 +11,9 @@ module.exports = function (stylecow) {
 	}, function () {
 
 		stylecow.addTask({
+			position: 'before',
 			fn: function (root) {
-				root.setData('rem', 16);
+				rem = 16;
 			}
 		});
 
@@ -35,7 +38,7 @@ module.exports = function (stylecow) {
 						type: 'Declaration',
 						name: 'font-size'
 					}).forEach(function (declaration) {
-						rule.parent.setData('rem', toPixels(declaration.get('Unit')));
+						rem = toPixels(declaration.get('Unit'));
 					});
 				}
 			}
@@ -60,7 +63,7 @@ module.exports = function (stylecow) {
 						})
 						.forEach(function (unit) {
 							unit.name = 'px';
-							unit.get('Number').name *= unit.getData('rem');
+							unit.get('Number').name *= rem;
 						});
 				}
 			}
