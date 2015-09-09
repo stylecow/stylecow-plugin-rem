@@ -1,17 +1,17 @@
 {
-  "class": "Root",
+  "type": "Root",
   "children": [
     {
-      "class": "Rule",
+      "type": "Rule",
       "children": [
         {
-          "class": "Selectors",
+          "type": "Selectors",
           "children": [
             {
-              "class": "Selector",
+              "type": "Selector",
               "children": [
                 {
-                  "class": "TypeSelector",
+                  "type": "TypeSelector",
                   "name": "div"
                 }
               ]
@@ -19,22 +19,22 @@
           ]
         },
         {
-          "class": "Block",
+          "type": "Block",
           "children": [
             {
-              "class": "Declaration",
+              "type": "Declaration",
               "name": "font-size",
               "vendor": null,
               "children": [
                 {
-                  "class": "Value",
+                  "type": "Value",
                   "children": [
                     {
-                      "class": "Unit",
+                      "type": "Unit",
                       "name": "px",
                       "children": [
                         {
-                          "class": "Number",
+                          "type": "Number",
                           "name": 32
                         }
                       ]
@@ -44,19 +44,19 @@
               ]
             },
             {
-              "class": "Declaration",
+              "type": "Declaration",
               "name": "font-size",
               "vendor": null,
               "children": [
                 {
-                  "class": "Value",
+                  "type": "Value",
                   "children": [
                     {
-                      "class": "Unit",
+                      "type": "Unit",
                       "name": "rem",
                       "children": [
                         {
-                          "class": "Number",
+                          "type": "Number",
                           "name": 2
                         }
                       ]
@@ -70,16 +70,16 @@
       ]
     },
     {
-      "class": "Rule",
+      "type": "Rule",
       "children": [
         {
-          "class": "Selectors",
+          "type": "Selectors",
           "children": [
             {
-              "class": "Selector",
+              "type": "Selector",
               "children": [
                 {
-                  "class": "TypeSelector",
+                  "type": "TypeSelector",
                   "name": "p"
                 }
               ]
@@ -87,22 +87,22 @@
           ]
         },
         {
-          "class": "Block",
+          "type": "Block",
           "children": [
             {
-              "class": "Declaration",
+              "type": "Declaration",
               "name": "margin",
               "vendor": null,
               "children": [
                 {
-                  "class": "Value",
+                  "type": "Value",
                   "children": [
                     {
-                      "class": "Unit",
+                      "type": "Unit",
                       "name": "px",
                       "children": [
                         {
-                          "class": "Number",
+                          "type": "Number",
                           "name": 8
                         }
                       ]
@@ -112,19 +112,19 @@
               ]
             },
             {
-              "class": "Declaration",
+              "type": "Declaration",
               "name": "margin",
               "vendor": null,
               "children": [
                 {
-                  "class": "Value",
+                  "type": "Value",
                   "children": [
                     {
-                      "class": "Unit",
+                      "type": "Unit",
                       "name": "rem",
                       "children": [
                         {
-                          "class": "Number",
+                          "type": "Number",
                           "name": 0.5
                         }
                       ]

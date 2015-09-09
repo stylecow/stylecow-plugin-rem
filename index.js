@@ -1,73 +1,64 @@
+"use strict";
+
 module.exports = function (stylecow) {
-
 	var rem;
-
-	stylecow.forBrowsersLowerThan({
+	var support = {
 		firefox: 3.6,
 		explorer: 9.0,
 		safari: 5.0,
 		opera: 11.6,
 		ios: 4.0
-	}, function () {
+	};
 
-		stylecow.addTask({
-			position: 'before',
-			fn: function (root) {
-				rem = 16;
+	//rem starts with 16px
+	stylecow.addTask({
+		forBrowsersLowerThan: support,
+		position: 'before',
+		fn: function (root) {
+			rem = 16;
+		}
+	});
+
+	//If we find font-size inside :root or html, change the rem value
+	stylecow.addTask({
+		forBrowsersLowerThan: support,
+		filter: 'Rule',
+		fn: function (rule) {
+			if (rule.hasParent('Root') && rule.getChild('Selectors').has({
+				type: 'Selector',
+				string: [':root', 'html']
+			})) {
+				rule.getChild('Block')
+				.walkChildren({
+					type: 'Declaration',
+					name: 'font-size'
+				}, function (declaration) {
+					rem = toPixels(declaration.get('Unit'));
+				});
 			}
-		});
+		}
+	});
 
-		stylecow.addTask({
-			filter: {
-				type: 'Rule'
-			},
-			fn: function (rule) {
-				if (
-					rule.parent
-				 && rule.parent.type === 'Root'
-				 && rule
-					.getChild('Selectors')
-					.has({
-						type: 'Selector',
-						string: [':root', 'html']
-					})
-				 ) {
-					rule.getChild({
-						type: 'Block'
-					}).getChildren({
-						type: 'Declaration',
-						name: 'font-size'
-					}).forEach(function (declaration) {
-						rem = toPixels(declaration.get('Unit'));
+	//Add the fallback
+	stylecow.addTask({
+		forBrowsersLowerThan: support,
+		filter: 'Declaration',
+		fn: function (declaration) {
+			if (declaration.has({
+				type: 'Unit',
+				name: 'rem'
+			})) {
+				declaration
+					.cloneBefore()
+					.walk({
+						type: 'Unit',
+						name: 'rem'
+					}, function (unit) {
+						unit.name = 'px';
+						unit.get('Number').name *= rem;
 					});
-				}
 			}
-		});
-
-
-		//Add the fallback
-		stylecow.addTask({
-			filter: {
-				type: 'Declaration'
-			},
-			fn: function (declaration) {
-				if (declaration.has({
-					type: 'Unit',
-					name: 'rem'
-				})) {
-					declaration
-						.cloneBefore()
-						.getAll({
-							type: 'Unit',
-							name: 'rem'
-						})
-						.forEach(function (unit) {
-							unit.name = 'px';
-							unit.get('Number').name *= rem;
-						});
-				}
-			}
-		});
+		}
 	});
 };
 
