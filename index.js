@@ -50,10 +50,11 @@ module.exports = function (tasks) {
             })) {
                 declaration
                     .cloneBefore()
-                    .walk({
+                    .getAll({
                         type: 'Unit',
                         name: 'rem'
-                    }, function (unit) {
+                    })
+                    .forEach(function (unit) {
                         unit.name = 'px';
                         unit.get('Number').name *= rem;
                     });
